@@ -1,12 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -v --volumes persistentVolumeClaim -f docker-compose.yml
-    kompose.version: 1.17.0 (a74acad)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: php
   name: php
 spec:
   replicas: 1
@@ -14,12 +8,11 @@ spec:
     type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: php
+        id: php
     spec:
       containers:
-      - image: localhost:5000/wuestkamp_php #eu.gcr.io/wuestkamp-221618/wuestkamp_php:latest
+      - image: localhost:5000/wuestkamp_php
         name: php
         ports:
         - containerPort: 9001
@@ -29,9 +22,7 @@ spec:
           name: php-claim0
         env:
         - name: APP_ENV
-          value: prod
-        - name: MAILER_URL
-          value: smtp://smtp.sendgrid.net:465?encryption=ssl&auth_mode=login&username=apikey&password=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
+          value: dev
       restartPolicy: Always
       volumes:
       - name: php-claim0

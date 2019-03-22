@@ -17,7 +17,7 @@ RUN adduser -D -g '' -G www-data www-data
 
 RUN mkdir /etc/nginx/ssl
 
-COPY symfony/public/assets /var/www/symfony/public/assets
+#COPY symfony/public/assets /var/www/symfony/public/assets
 
 CMD ["nginx"]
 

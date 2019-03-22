@@ -1,12 +1,6 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -v --volumes persistentVolumeClaim -f docker-compose.yml
-    kompose.version: 1.17.0 (a74acad)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: php
   name: php
 spec:
   ports:
@@ -14,6 +8,6 @@ spec:
     port: 9001
     targetPort: 9001
   selector:
-    io.kompose.service: php
+    id: php
 status:
   loadBalancer: {}
