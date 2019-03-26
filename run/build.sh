@@ -2,6 +2,9 @@
 
 CONTAINER_REPO="localhost:5000"
 
+yarn --cwd symfony install
+yarn --cwd symfony encore dev
+
 docker build -t $CONTAINER_REPO/wuestkamp_php:latest -f infrastructure/php-fpm/Dockerfile --build-arg build_path=infrastructure/php-fpm . #--no-cache
 docker build -t $CONTAINER_REPO/wuestkamp_nginx:latest -f infrastructure/nginx/Dockerfile --build-arg build_path=infrastructure/nginx . #--no-cache
 

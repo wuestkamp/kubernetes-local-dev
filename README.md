@@ -1,5 +1,4 @@
 todo:
-- asset handling between nginx and php
 - build during container build with webpack
     - npm install
 
