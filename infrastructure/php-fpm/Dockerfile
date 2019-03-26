@@ -53,9 +53,14 @@ ADD $build_path/symfony.pool.conf /etc/php7/php-fpm.d/
 CMD ["php-fpm7", "-F"]
 
 WORKDIR /var/www/symfony
+
+# Install composer packages (by starting with coping only composer file, to make use of docker layering feature)
+COPY symfony/composer.json symfony/composer.lock ./
+RUN composer install
+
 COPY symfony .
 
-RUN rm -rf public/assets
+#RUN rm -rf public/assets
 
 RUN rm -rf var/cache
 RUN rm -rf var/log
@@ -63,10 +68,10 @@ RUN mkdir -p var/log var/cache
 RUN chown -R www-data:www-data var
 RUN chmod -R 777 var
 
-RUN rm -rf vendor
-RUN composer install
+#RUN rm -rf vendor
+#RUN composer install
 
-RUN rm -rf var/cache/*
-RUN rm -rf var/log/*
+#RUN rm -rf var/cache/*
+#RUN rm -rf var/log/*
 
 EXPOSE 9001

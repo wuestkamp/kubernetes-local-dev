@@ -3,6 +3,13 @@ todo:
 
 
 
+For infrastructure considerations to have php and nginx on the same pod:
+https://itnext.io/scaling-your-symfony-application-and-preparing-it-for-deployment-on-kubernetes-c102bf246a93
+https://medium.com/@marekbartik/autoscale-nginx-and-php-fpm-independently-on-google-kubernetes-engine-290aead64f7f
+
+
+
+
 Kim Wüstkamp
 www.wuestkamp.com
 
