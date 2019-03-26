@@ -20,29 +20,24 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
+        volumeMounts:
+          - mountPath: /var/www/symfony/public
+            name: sf-public
 
       - image: localhost:5000/wuestkamp_php
         imagePullPolicy: Always
         name: php
-        #ports:
-        #- containerPort: 9001
-        #resources: {}
-        #volumeMounts:
-        #- mountPath: /var/www/symfony/var/log
-        #  name: php-claim0
+        volumeMounts:
+        - mountPath: /vol/sf-public
+          name: sf-public
+        readinessProbe:
+          exec:
+            command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /vol/sf-public/; true;']
         env:
         - name: APP_ENV
           value: dev
-
-
-        #volumeMounts:
-        #- mountPath: /var/log/nginx
-        #  name: nginx-claim0
-
-
       restartPolicy: Always
 
-      #volumes:
-      #- name: nginx-claim0
-      #  persistentVolumeClaim:
-      #    claimName: nginx-claim0
+      volumes:
+        - name: sf-public
+          emptyDir: {}

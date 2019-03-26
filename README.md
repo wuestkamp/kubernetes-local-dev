@@ -1,6 +1,7 @@
 todo:
 - asset handling between nginx and php
-
+- build during container build with webpack
+    - npm install
 
 
 For infrastructure considerations to have php and nginx on the same pod:
