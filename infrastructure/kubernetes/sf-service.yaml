@@ -1,14 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: sf-service
 spec:
   ports:
   - name: "80"
     port: 80
     targetPort: 80
   selector:
-    id: nginx
+    id: sf
   type: LoadBalancer
-status:
-  loadBalancer: {}

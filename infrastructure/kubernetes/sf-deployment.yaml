@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sf-deployment
+  labels:
+    id: sf-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      id: sf
+  template:
+    metadata:
+      labels:
+        id: sf
+    spec:
+      containers:
+      - image: localhost:5000/wuestkamp_nginx
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+
+      - image: localhost:5000/wuestkamp_php
+        imagePullPolicy: Always
+        name: php
+        #ports:
+        #- containerPort: 9001
+        #resources: {}
+        #volumeMounts:
+        #- mountPath: /var/www/symfony/var/log
+        #  name: php-claim0
+        env:
+        - name: APP_ENV
+          value: dev
+
+
+        #volumeMounts:
+        #- mountPath: /var/log/nginx
+        #  name: nginx-claim0
+
+
+      restartPolicy: Always
+
+      #volumes:
+      #- name: nginx-claim0
+      #  persistentVolumeClaim:
+      #    claimName: nginx-claim0

@@ -17,15 +17,15 @@ spec:
         ports:
         - containerPort: 9001
         resources: {}
-        volumeMounts:
-        - mountPath: /var/www/symfony/var/log
+        #volumeMounts:
+        #- mountPath: /var/www/symfony/var/log
           name: php-claim0
         env:
         - name: APP_ENV
           value: dev
       restartPolicy: Always
-      volumes:
-      - name: php-claim0
-        persistentVolumeClaim:
-          claimName: php-claim0
+      #volumes:
+      #- name: php-claim0
+      #  persistentVolumeClaim:
+      #    claimName: php-claim0
 status: {}
