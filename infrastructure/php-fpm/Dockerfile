@@ -48,6 +48,7 @@ ADD $build_path/symfony.ini /etc/php7/conf.d/
 ADD $build_path/symfony.ini /etc/php7/cli/conf.d/
 ADD $build_path/xdebug.ini  /etc/php7/conf.d/
 
+RUN rm /etc/php7/php-fpm.d/www.conf
 ADD $build_path/symfony.pool.conf /etc/php7/php-fpm.d/
 
 CMD ["php-fpm7", "-F"]
@@ -60,18 +61,11 @@ RUN composer install
 
 COPY symfony .
 
-#RUN rm -rf public/assets
-
 RUN rm -rf var/cache
 RUN rm -rf var/log
 RUN mkdir -p var/log var/cache
 RUN chown -R www-data:www-data var
 RUN chmod -R 777 var
 
-#RUN rm -rf vendor
-#RUN composer install
-
-#RUN rm -rf var/cache/*
-#RUN rm -rf var/log/*
-
-EXPOSE 9001
+RUN bin/console cache:warmup --env=prod
+RUN bin/console cache:warmup --env=dev

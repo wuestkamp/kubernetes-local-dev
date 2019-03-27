@@ -12,6 +12,8 @@ class DefaultController extends AbstractController
      */
     public function main()
     {
-        return $this->render('Default/main.html.twig');
+        return $this->render('Default/main.html.twig', [
+            'hostname' => getenv('PHP_POD_NAME'),
+        ]);
     }
 }
