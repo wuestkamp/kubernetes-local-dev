@@ -18,19 +18,22 @@ spec:
 
       volumes:
         # we create one shared volume for the symfony assets so nginx and php can access those
-        - name: sf-public
-          emptyDir: {}
+#        - name: sf-public
+#          emptyDir: {}
+        - name: hostvolume
+          hostPath:
+            path: /Users/kim/Wuestkamp/Projects/repos/github/kubernetes-local-dev/symfony # path to our symfony project
 
-      initContainers:
-        # this container is of same image as our php container, its executed to initialise our pod.
-        # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
-      - name: init
-        image: localhost:5000/wuestkamp_php
-        imagePullPolicy: Always
-        volumeMounts:
-        - mountPath: /tmp/sf-public
-          name: sf-public
-        command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /tmp/sf-public/; true;']
+#      initContainers:
+#        # this container is of same image as our php container, its executed to initialise our pod.
+#        # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
+#      - name: init
+#        image: localhost:5000/wuestkamp_php
+#        imagePullPolicy: Always
+#        volumeMounts:
+#        - mountPath: /tmp/sf-public
+#          name: sf-public
+#        command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /tmp/sf-public/; true;']
 
       containers:
         # the nginx container, it mounts the shared volume to provide assets directly via http response
@@ -40,19 +43,23 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          - mountPath: /var/www/symfony/public
-            name: sf-public
+#          - mountPath: /var/www/symfony/public
+#            name: sf-public
+        - mountPath: /var/www/symfony
+          name: hostvolume
 
         # the php container
       - image: localhost:5000/wuestkamp_php
         imagePullPolicy: Always
         name: php
         volumeMounts:
-        - mountPath: /var/www/symfony/public
-          name: sf-public
+#        - mountPath: /var/www/symfony/public
+#          name: sf-public
+        - mountPath: /var/www/symfony
+          name: hostvolume
         env:
         - name: APP_ENV
-          value: prod
+          value: dev
         - name: PHP_POD_NAME
           valueFrom:
             fieldRef:
