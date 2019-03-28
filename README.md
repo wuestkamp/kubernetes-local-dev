@@ -14,7 +14,7 @@ https://medium.com/@wuestkamp/symfony4-kubernetes-local-development-environment-
 ### in short
 First we need a local container repository, run with:
 
-`run/regsitry.sh`
+`run/registry.sh`
 
 Build the containers: `run/build.sh`
 
