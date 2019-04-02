@@ -18,11 +18,8 @@ spec:
 
       volumes:
         # we create one shared volume for the symfony assets so nginx and php can access those
-#        - name: sf-public
-#          emptyDir: {}
-        - name: hostvolume
-          hostPath:
-            path: /Users/kim/Wuestkamp/Projects/repos/github/kubernetes-local-dev/symfony # path to our symfony project
+        - name: sf-public
+          emptyDir: {}
 
 #      initContainers:
 #        # this container is of same image as our php container, its executed to initialise our pod.
@@ -43,20 +40,16 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-#          - mountPath: /var/www/symfony/public
-#            name: sf-public
-        - mountPath: /var/www/symfony
-          name: hostvolume
+          - mountPath: /var/www/symfony/public
+            name: sf-public
 
         # the php container
       - image: localhost:5000/wuestkamp_php
         imagePullPolicy: Always
         name: php
         volumeMounts:
-#        - mountPath: /var/www/symfony/public
-#          name: sf-public
-        - mountPath: /var/www/symfony
-          name: hostvolume
+        - mountPath: /var/www/symfony/public
+          name: sf-public
         env:
         - name: APP_ENV
           value: dev
