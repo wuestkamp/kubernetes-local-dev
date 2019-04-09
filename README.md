@@ -28,3 +28,12 @@ Delete Kubernetes objects: `run/down.sh`
 
 ## Part 2
 checkout branch part2
+
+This branch belongs to this article:
+
+https://medium.com/@wuestkamp/symfony4-kubernetes-local-development-environment-2-looking-at-speed-issues-a61955927e69
+
+We were looking in setting up code syncing via volume shares with different options.
+
+## Part 3
+checkout branch part3
