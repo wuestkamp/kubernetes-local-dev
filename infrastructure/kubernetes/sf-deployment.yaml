@@ -16,10 +16,10 @@ spec:
     spec:
       restartPolicy: Always
 
-      volumes:
-        # we create one shared volume for the symfony assets so nginx and php can access those
-        - name: sf-public
-          emptyDir: {}
+#      volumes:
+#        # we create one shared volume for the symfony assets so nginx and php can access those
+#        - name: sf-public
+#          emptyDir: {}
 
 #      initContainers:
 #        # this container is of same image as our php container, its executed to initialise our pod.
@@ -39,17 +39,17 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
-        volumeMounts:
-          - mountPath: /var/www/symfony/public
-            name: sf-public
+#        volumeMounts:
+#          - mountPath: /var/www/symfony/public
+#            name: sf-public
 
         # the php container
       - image: localhost:5000/wuestkamp_php
         imagePullPolicy: Always
         name: php
-        volumeMounts:
-        - mountPath: /var/www/symfony/public
-          name: sf-public
+#        volumeMounts:
+#        - mountPath: /var/www/symfony/public
+#          name: sf-public
         env:
         - name: APP_ENV
           value: dev
