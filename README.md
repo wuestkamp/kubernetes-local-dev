@@ -46,3 +46,9 @@ We did setup Ksync so solve the volume-share speed issues form part 2
 
 ## Part 4
 checkout branch part4
+
+This branch belongs to this article:
+
+COMIN!
+
+We did setup Helm so switch nicely between local development and production deployment.

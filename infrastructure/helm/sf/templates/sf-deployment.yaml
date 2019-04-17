@@ -5,7 +5,7 @@ metadata:
   labels:
     id: sf-deployment
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       id: sf
