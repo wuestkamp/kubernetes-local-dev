@@ -1,20 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sf-deployment-{{ .Chart.Version }}
+  name: {{ template "deployment.id" . }}
   labels:
-    id: sf-deployment-{{ .Chart.Version }}
+    id: {{ template "deployment.id" . }}
   annotations:
     environment: {{ .Values.environment }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      id: sf-pod-{{ .Chart.Version }}
+      id: {{ template "pod.id" . }}
   template:
     metadata:
       labels:
-        id: sf-pod-{{ .Chart.Version }}
+        id: {{ template "pod.id" . }}
     spec:
       restartPolicy: Always
 
@@ -50,7 +50,7 @@ spec:
         {{ end }}
 
         # the php container
-      - image: localhost:5000/wuestkamp_php
+      - image: {{ .Values.php.image }}
         imagePullPolicy: {{ .Values.php.imagePullPolicy }}
         name: php
         env:
