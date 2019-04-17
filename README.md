@@ -37,3 +37,12 @@ We were looking in setting up code syncing via volume shares with different opti
 
 ## Part 3
 checkout branch part3
+
+This branch belongs to this article:
+
+https://medium.com/@wuestkamp/symfony4-kubernetes-local-development-environment-3-ksync-510deb161da3
+
+We did setup Ksync so solve the volume-share speed issues form part 2
+
+## Part 4
+checkout branch part4
