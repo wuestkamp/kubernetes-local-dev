@@ -4,6 +4,8 @@ metadata:
   name: sf-deployment
   labels:
     id: sf-deployment
+  annotations:
+    environment: {{ .Values.environment }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:
@@ -16,21 +18,23 @@ spec:
     spec:
       restartPolicy: Always
 
-#      volumes:
-#        # we create one shared volume for the symfony assets so nginx and php can access those
-#        - name: sf-public
-#          emptyDir: {}
+      {{ if ne .Values.environment "dev" }}
+      volumes:
+        # we create one shared volume for the symfony assets so nginx and php can access those
+        - name: sf-public
+          emptyDir: {}
 
-#      initContainers:
-#        # this container is of same image as our php container, its executed to initialise our pod.
-#        # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
-#      - name: init
-#        image: localhost:5000/wuestkamp_php
-#        imagePullPolicy: Always
-#        volumeMounts:
-#        - mountPath: /tmp/sf-public
-#          name: sf-public
-#        command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /tmp/sf-public/; true;']
+      initContainers:
+        # this container is of same image as our php container, its executed to initialise our pod.
+        # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
+      - name: init
+        image: localhost:5000/wuestkamp_php
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /tmp/sf-public
+          name: sf-public
+        command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /tmp/sf-public/; true;']
+      {{ end }}
 
       containers:
         # the nginx container, it mounts the shared volume to provide assets directly via http response
@@ -39,17 +43,16 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
-#        volumeMounts:
-#          - mountPath: /var/www/symfony/public
-#            name: sf-public
+        {{ if ne .Values.environment "dev" }}
+        volumeMounts:
+          - mountPath: /var/www/symfony/public
+            name: sf-public
+        {{ end }}
 
         # the php container
       - image: localhost:5000/wuestkamp_php
         imagePullPolicy: Always
         name: php
-#        volumeMounts:
-#        - mountPath: /var/www/symfony/public
-#          name: sf-public
         env:
         - name: APP_ENV
           value: dev
@@ -57,3 +60,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        {{ if ne .Values.environment "dev" }}
+        volumeMounts:
+        - mountPath: /var/www/symfony/public
+          name: sf-public
+        {{ end }}
