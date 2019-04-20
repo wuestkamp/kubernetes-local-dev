@@ -56,6 +56,8 @@ spec:
         env:
         - name: APP_ENV
           value: {{ .Values.php.symfony.appEnv }}
+        - name: DATABASE_URL
+          value: {{ .Values.php.symfony.databaseUrl }}
         - name: PHP_POD_NAME
           valueFrom:
             fieldRef:

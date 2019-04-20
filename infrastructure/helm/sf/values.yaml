@@ -4,17 +4,18 @@ environment: dev
 php:
   symfony:
     appEnv: dev
-  image: localhost:5000/wuestkamp_php
+    databaseUrl: pgsql://pg:abcdef@sf-postgresql:5432/symfony
+  image: localhost:5000/wuestkamp_php:latest
   imagePullPolicy: Always
 
 nginx:
-  image: localhost:5000/wuestkamp_nginx
+  image: localhost:5000/wuestkamp_nginx:latest
   imagePullPolicy: Always
 
 postgresql:
   enabled: true
-  postgresUser: postgresql
-  postgresPassword: 123456
-  postgresDatabase: sf
+  postgresqlUsername: pg
+  postgresqlPassword: abcdef
+  postgresqlDatabase: symfony
   persistence:
     enabled: true

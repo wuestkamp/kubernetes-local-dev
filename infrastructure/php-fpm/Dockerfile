@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM php:7.3.3-fpm-alpine3.9
 
 LABEL maintainer="Kim Wuestkamp <kim@wuestkamp.com>"
 
@@ -28,16 +28,18 @@ RUN apk add --update \
     php7-session \
     php7-simplexml \
     php7-xdebug \
+    libzip-dev \
     php7-zip \
+    postgresql-dev \
+    postgresql-client \
     make \
     curl \
     shadow
 
-RUN adduser -D -u 1000 www-data
+RUN docker-php-ext-install pdo pdo_pgsql zip
+
 RUN usermod -u 1000 www-data
 RUN groupmod -g 1000 www-data
-
-RUN su www-data
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && \
     curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
@@ -66,6 +68,3 @@ RUN rm -rf var/log
 RUN mkdir -p var/log var/cache
 RUN chown -R www-data:www-data var
 RUN chmod -R 777 var
-
-RUN bin/console cache:warmup --env=prod
-RUN bin/console cache:warmup --env=dev
