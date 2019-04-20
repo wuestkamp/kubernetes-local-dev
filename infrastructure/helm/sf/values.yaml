@@ -10,3 +10,11 @@ php:
 nginx:
   image: localhost:5000/wuestkamp_nginx
   imagePullPolicy: Always
+
+postgresql:
+  enabled: true
+  postgresUser: postgresql
+  postgresPassword: 123456
+  postgresDatabase: sf
+  persistence:
+    enabled: true
