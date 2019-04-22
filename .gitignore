@@ -1,4 +1,4 @@
 .idea
 /symfony/.env
 **/.DS_Store
-/infrastructure/certs
+/infrastructure/certs/nginx/*

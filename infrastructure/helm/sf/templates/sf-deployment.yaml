@@ -23,6 +23,9 @@ spec:
         # we create one shared volume for the symfony assets so nginx and php can access those
         - name: sf-public
           emptyDir: {}
+        - name: secret-volume
+          secret:
+            secretName: nginxsecret
 
       initContainers:
         # this container is of same image as our php container, its executed to initialise our pod.
@@ -43,10 +46,14 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
+        - containerPort: 443
         {{ if ne .Values.environment "dev" }}
         volumeMounts:
           - mountPath: /var/www/symfony/public
             name: sf-public
+          - mountPath: /etc/nginx/ssl
+            name: secret-volume
+            readOnly: true
         {{ end }}
 
         # the php container

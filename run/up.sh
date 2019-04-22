@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-helm install --name sf infrastructure/helm/sf --set environment=${1:-dev} --set php.symfony.appEnv=${1:-dev} #--set postgresqlUsername=pg --set postgresqlPassword=abcdef --set postgresqlDatabase=symfony
+kubectl create secret tls nginxsecret --key infrastructure/certs/nginx/server.key --cert infrastructure/certs/nginx/server.csr
+helm install --name sf infrastructure/helm/sf --set environment=${1:-dev} --set php.symfony.appEnv=${1:-dev}
