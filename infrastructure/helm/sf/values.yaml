@@ -1,5 +1,6 @@
 replicas: 1
 environment: dev
+localhost: 192.168.0.234
 
 php:
   symfony:

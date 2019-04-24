@@ -17,7 +17,10 @@ spec:
         id: {{ template "pod.id" . }}
     spec:
       restartPolicy: Always
-
+      hostAliases:
+        - ip: {{ .Values.localhost }}
+          hostnames:
+          - "docker-host.localhost"
       volumes:
         - name: secret-volume
           secret:
