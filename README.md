@@ -50,4 +50,4 @@ checkout branch part5
 
 TODO Medium URL:
 
-We did setup Postgresql and Nginx Https.
+We did setup Postgresql, Nginx Https and Xdebug.
