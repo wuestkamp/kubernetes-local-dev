@@ -27,6 +27,11 @@ spec:
         - name: sf-public
           emptyDir: {}
         {{ end }}
+        {{ if eq .Values.environment "dev" }}
+        - name: php-xdebug-config
+          configMap:
+            name: php-xdebug-config
+        {{ end }}
 
       {{ if ne .Values.environment "dev" }}
       initContainers:
@@ -71,8 +76,13 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        {{ if ne .Values.environment "dev" }}
         volumeMounts:
+        {{ if ne .Values.environment "dev" }}
         - mountPath: /var/www/symfony/public
           name: sf-public
+        {{ end }}
+        {{ if eq .Values.environment "dev" }}
+        - mountPath: /etc/php7/conf.d/xdebug.ini
+          name: php-xdebug-config
+          subPath: xdebug.ini
         {{ end }}
