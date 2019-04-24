@@ -18,15 +18,17 @@ spec:
     spec:
       restartPolicy: Always
 
-      {{ if ne .Values.environment "dev" }}
       volumes:
-        # we create one shared volume for the symfony assets so nginx and php can access those
-        - name: sf-public
-          emptyDir: {}
         - name: secret-volume
           secret:
             secretName: nginxsecret
+        {{ if ne .Values.environment "dev" }}
+        # we create one shared volume for the symfony assets so nginx and php can access those
+        - name: sf-public
+          emptyDir: {}
+        {{ end }}
 
+      {{ if ne .Values.environment "dev" }}
       initContainers:
         # this container is of same image as our php container, its executed to initialise our pod.
         # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
@@ -47,14 +49,14 @@ spec:
         ports:
         - containerPort: 80
         - containerPort: 443
-        {{ if ne .Values.environment "dev" }}
         volumeMounts:
-          - mountPath: /var/www/symfony/public
-            name: sf-public
           - mountPath: /etc/nginx/ssl
             name: secret-volume
             readOnly: true
-        {{ end }}
+          {{ if ne .Values.environment "dev" }}
+          - mountPath: /var/www/symfony/public
+            name: sf-public
+          {{ end }}
 
         # the php container
       - image: {{ .Values.php.image }}
