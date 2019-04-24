@@ -18,6 +18,13 @@ spec:
     spec:
       restartPolicy: Always
 
+      {{ if eq .Values.environment "dev" }}
+      volumes:
+        - name: php-xdebug-config
+          configMap:
+            name: php-xdebug-config
+      {{ end }}
+
       {{ if ne .Values.environment "dev" }}
       volumes:
         # we create one shared volume for the symfony assets so nginx and php can access those
@@ -73,4 +80,10 @@ spec:
         volumeMounts:
         - mountPath: /var/www/symfony/public
           name: sf-public
+        {{ end }}
+        {{ if eq .Values.environment "dev" }}
+        volumeMounts:
+        - mountPath: /etc/php7/conf.d/xdebug.ini
+          name: php-xdebug-config
+          subPath: xdebug.ini
         {{ end }}
