@@ -49,6 +49,9 @@ checkout branch part4
 
 This branch belongs to this article:
 
-COMIN!
+https://medium.com/devopslinks/symfony4-kubernetes-local-development-environment-4-helm-37c395aea400
 
 We did setup Helm so switch nicely between local development and production deployment.
+
+## Part 5
+checkout branch part5
