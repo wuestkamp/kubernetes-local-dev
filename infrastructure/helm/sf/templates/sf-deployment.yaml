@@ -27,7 +27,7 @@ spec:
         - name: sf-public
           emptyDir: {}
         {{ end }}
-        {{ if eq .Values.environment "dev" }}
+        {{ if eq .Values.php.xdebug true }}
         - name: php-xdebug-config
           configMap:
             name: php-xdebug-config
@@ -81,7 +81,7 @@ spec:
         - mountPath: /var/www/symfony/public
           name: sf-public
         {{ end }}
-        {{ if eq .Values.environment "dev" }}
+        {{ if eq .Values.php.xdebug true }}
         - mountPath: /etc/php7/conf.d/xdebug.ini
           name: php-xdebug-config
           subPath: xdebug.ini

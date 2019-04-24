@@ -7,6 +7,7 @@ php:
     databaseUrl: pgsql://pg:abcdef@sf-postgresql:5432/symfony
   image: localhost:5000/wuestkamp_php:latest
   imagePullPolicy: Always
+  xdebug: true
 
 nginx:
   image: localhost:5000/wuestkamp_nginx:latest
