@@ -41,13 +41,11 @@ We did setup Ksync so solve the volume-share speed issues form part 2
 ## Part 4
 checkout branch part4
 
-TODO Medium URL:
+https://medium.com/devopslinks/symfony4-kubernetes-local-development-environment-4-helm-37c395aea400
 
 We did setup Helm so switch nicely between local development and production deployment.
 
-## part 5
+## Part 5
 checkout branch part5
-
-TODO Medium URL:
 
 We did setup Postgresql, Nginx Https and Xdebug.
