@@ -1,0 +1,67 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "deployment.id" . }}
+  labels:
+    id: {{ template "deployment.id" . }}
+  annotations:
+    environment: {{ .Values.environment }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      id: {{ template "pod.id" . }}
+  template:
+    metadata:
+      labels:
+        id: {{ template "pod.id" . }}
+    spec:
+      restartPolicy: Always
+
+      {{ if ne .Values.environment "dev" }}
+      volumes:
+        # we create one shared volume for the symfony assets so nginx and php can access those
+        - name: sf-public
+          emptyDir: {}
+
+      initContainers:
+        # this container is of same image as our php container, its executed to initialise our pod.
+        # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
+      - name: init
+        image: {{ .Values.php.image }}
+        imagePullPolicy: {{ .Values.php.imagePullPolicy }}
+        volumeMounts:
+        - mountPath: /tmp/sf-public
+          name: sf-public
+        command: ['sh', '-c', 'cp -r /var/www/symfony/public/* /tmp/sf-public/; true;']
+      {{ end }}
+
+      containers:
+        # the nginx container, it mounts the shared volume to provide assets directly via http response
+      - image: {{ .Values.nginx.image }}
+        imagePullPolicy: {{ .Values.nginx.imagePullPolicy }}
+        name: nginx
+        ports:
+        - containerPort: 80
+        {{ if ne .Values.environment "dev" }}
+        volumeMounts:
+          - mountPath: /var/www/symfony/public
+            name: sf-public
+        {{ end }}
+
+        # the php container
+      - image: {{ .Values.php.image }}
+        imagePullPolicy: {{ .Values.php.imagePullPolicy }}
+        name: php
+        env:
+        - name: APP_ENV
+          value: {{ .Values.php.symfony.appEnv }}
+        - name: PHP_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        {{ if ne .Values.environment "dev" }}
+        volumeMounts:
+        - mountPath: /var/www/symfony/public
+          name: sf-public
+        {{ end }}
