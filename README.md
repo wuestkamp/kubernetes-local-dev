@@ -4,6 +4,17 @@ www.wuestkamp.com
 # Kubernetes Symfony Local Development Environment
 This repo was created alongside the articles on https://medium.com/@wuestkamp
 
+
+## setup
+```
+kubectl create -f infrastructure/kubernetes/tiller-sa.yaml
+helm init --service-account tiller --upgrade
+./run/registry.sh
+./run/build.sh
+./run/up.sh
+./run/ksync.sh
+```
+
 ## Part 1
 checkout branch part1
 
@@ -48,4 +59,10 @@ We did setup Helm so switch nicely between local development and production depl
 ## Part 5
 checkout branch part5
 
-We did setup Postgresql, Nginx Https and Xdebug.
+https://medium.com/@wuestkamp/symfony4-kubernetes-local-development-environment-5-postgresql-https-xdebug-5f408b548665
+
+We did setup Postgresql, HTTP for Nginx and Xdebug
+
+## Part 6
+
+coming up...
