@@ -17,13 +17,26 @@ spec:
         id: {{ template "pod.id" . }}
     spec:
       restartPolicy: Always
-
-      {{ if ne .Values.environment "dev" }}
+      hostAliases:
+        - ip: {{ .Values.localhost }}
+          hostnames:
+          - "docker-host.localhost"
       volumes:
+        - name: secret-volume
+          secret:
+            secretName: nginxsecret
+        {{ if ne .Values.environment "dev" }}
         # we create one shared volume for the symfony assets so nginx and php can access those
         - name: sf-public
           emptyDir: {}
+        {{ end }}
+        {{ if eq .Values.php.xdebug true }}
+        - name: php-xdebug-config
+          configMap:
+            name: php-xdebug-config
+        {{ end }}
 
+      {{ if ne .Values.environment "dev" }}
       initContainers:
         # this container is of same image as our php container, its executed to initialise our pod.
         # it will mount the shared volume sf-public and copy the (already compiled) symfony assets into it
@@ -43,11 +56,15 @@ spec:
         name: nginx
         ports:
         - containerPort: 80
-        {{ if ne .Values.environment "dev" }}
+        - containerPort: 443
         volumeMounts:
+          - mountPath: /etc/nginx/ssl
+            name: secret-volume
+            readOnly: true
+          {{ if ne .Values.environment "dev" }}
           - mountPath: /var/www/symfony/public
             name: sf-public
-        {{ end }}
+          {{ end }}
 
         # the php container
       - image: {{ .Values.php.image }}
@@ -56,12 +73,19 @@ spec:
         env:
         - name: APP_ENV
           value: {{ .Values.php.symfony.appEnv }}
+        - name: DATABASE_URL
+          value: {{ .Values.php.symfony.databaseUrl }}
         - name: PHP_POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        {{ if ne .Values.environment "dev" }}
         volumeMounts:
+        {{ if ne .Values.environment "dev" }}
         - mountPath: /var/www/symfony/public
           name: sf-public
+        {{ end }}
+        {{ if eq .Values.php.xdebug true }}
+        - mountPath: /etc/php7/conf.d/xdebug.ini
+          name: php-xdebug-config
+          subPath: xdebug.ini
         {{ end }}

@@ -1,8 +1,4 @@
-/logs
-#/symfony
 .idea
-symfony/public/assets/.DS_Store symfony/public/assets/images/.DS_Store
-symfony/.env
-.DS_Store
-certs
-credentials
+/symfony/.env
+**/.DS_Store
+/infrastructure/certs/nginx/*

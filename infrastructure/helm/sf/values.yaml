@@ -1,12 +1,23 @@
 replicas: 1
 environment: dev
+localhost: 192.168.0.234
 
 php:
   symfony:
     appEnv: dev
-  image: localhost:5000/wuestkamp_php
+    databaseUrl: pgsql://pg:abcdef@sf-postgresql:5432/symfony
+  image: localhost:5000/wuestkamp_php:latest
   imagePullPolicy: Always
+  xdebug: true
 
 nginx:
-  image: localhost:5000/wuestkamp_nginx
+  image: localhost:5000/wuestkamp_nginx:latest
   imagePullPolicy: Always
+
+postgresql:
+  enabled: true
+  postgresqlUsername: pg
+  postgresqlPassword: abcdef
+  postgresqlDatabase: symfony
+  persistence:
+    enabled: true
